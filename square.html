@@ -75,7 +75,7 @@ html,body{
 <div class="values"><span id="numcirc">Number of Circles: 60</span><span id="pdf">Phase Difference: 336</span><span id="smallradius">Inner Radius: 30</span></div>
 <div class="instru">
 <p> SPACE: Surprise Me | ESC: Reset</p>
-<p>UP/DOWN : Increase/Decrease number of circles | RIGHT/LEFT : Increase/Decrease phase difference | W/S : Increase/Decrease inner radius </p>
+<p>UP/DOWN : Increase/Decrease number of circles | RIGHT/LEFT : Increase/Decrease phase difference | Q/A : Increase/Decrease inner radius </p>
 
 
 </div>
@@ -130,8 +130,8 @@ function hiide(){
 		if(e.keyCode==38)numcirc++;
 		if(e.keyCode==39)pdf++;
 		if(e.keyCode==40)numcirc--;
-		if(e.key=='w')smallradius+=2;
-		if(e.key=='s')smallradius-=2;
+		if(e.key=='q')smallradius+=2;
+		if(e.key=='a')smallradius-=2;
 		if(e.keyCode==27)reset();
 		if(e.keyCode==32)surprise();
 		updatetext();
