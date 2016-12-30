@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Shiffman Coding Challenge 01: Starfield</title>
+	<title>Resonating Circles</title>
 </head>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
 <style type="text/css">
 html,body{
 	overflow: hidden;
@@ -36,7 +38,7 @@ html,body{
 		vertical-align: middle;
 		margin: auto;
 		color:white;
-		font-family: 'Lato',Helvetica;
+		font-family: Roboto,sans-serif;
 		text-align: center;
 		top:45%;
 		
@@ -45,30 +47,54 @@ html,body{
 		z-index: 10;
 		color:black;
 		position: fixed;
-		bottom:20px;
+		bottom:40px;
 		text-align: center;
-		font-family: Lato;
+		font-family: Roboto,sans-serif;
 		display: block;
+		font-size: 0.8em;
 		width: 100%;
 		transition: visibility 1s,opacity 0.5s linear;
 
 	}
+	span{
+		margin-left: 30px;
+		color:#333;
+		font-size: 1.1em;
+	}
+.instru{
+	color:#999;
+	margin-top: 8px;
+}
+
 </style>
 <script type="text/javascript" src="p5.min.js"></script>
 <body>
 
 <div id="content"></div>
-<div id="instructions">Some instructions here to explain the random shit above</div>
+<div id="instructions">
+<div class="values"><span id="numcirc">Number of Circles: 60</span><span id="pdf">Phase Difference: 336</span><span id="smallradius">Inner Radius: 30</span></div>
+<div class="instru">
+<p> SPACE: Surprise Me | ESC: Reset</p>
+<p>UP/DOWN : Increase/Decrease number of circles | RIGHT/LEFT : Increase/Decrease phase difference | W/S : Increase/Decrease inner radius </p>
+
+
+</div>
+</div>
 <div id="cover">
 <div id="innercontents">
-TITLE GOES HERE :)
+<h3>Resonating Circles</h3>
+<p style="font-family:Georgia;font-style:italic;margin-top: 10px;">By iashris</p>
 </div>
 
 
 </div>
 </body>
 <script type="text/javascript">
-setTimeout(hiide,3000);
+setTimeout(hiide,2500);
+
+var smallradius=30;
+var pdf=336;
+var numcirc=60;
 function hiide(){
 	document.getElementById('cover').style.opacity="0";
 	document.getElementById('cover').style.visibility="hidden";
@@ -76,16 +102,58 @@ function hiide(){
 	function setup(){
 		var myCanvas=createCanvas(windowWidth,windowHeight+2);
 		myCanvas.parent('content');
-			fill('rgba(22,22,22,0.5)');
-		noStroke();
+		fill('rgba(22,22,22,0.5)');
+		
 	}
 	function draw(){
+		background('#fff');
+		translate(width/2,height/2-20);
+		for(var i=0;i<numcirc;i++){
+			rotate(radians(360/numcirc));
+			noStroke();
+			ellipse(0,200,10,10);
+			var centx=0+smallradius*cos(radians(frameCount+i*pdf));
+			var centy=120+smallradius*sin(radians(frameCount+i*pdf));
 
-		ellipse(random(width),random(height),30,30);
+			ellipse(centx,centy,5,5);
+			strokeWeight(1);
+			stroke('rgba(22,22,22,0.5)');
+			line(0,200,centx,centy);
+		}
 
 	}
 	function windowResized() {
 		resizeCanvas(windowWidth, windowHeight);
+	}
+	document.addEventListener('keydown',function(e){
+		if(e.keyCode==37)pdf--;
+		if(e.keyCode==38)numcirc++;
+		if(e.keyCode==39)pdf++;
+		if(e.keyCode==40)numcirc--;
+		if(e.key=='w')smallradius+=2;
+		if(e.key=='s')smallradius-=2;
+		if(e.keyCode==27)reset();
+		if(e.keyCode==32)surprise();
+		updatetext();
+	
+
+	});
+	function reset(){
+		smallradius=30;pdf=336;numcirc=60;
+	}
+	function surprise(){
+		smallradius=Math.floor(300*(Math.random()-0.5));
+		pdf=Math.floor(1200*(Math.random()-0.5));
+		numcirc=Math.floor(250*(Math.random()));
+		updatetext();
+
+	}
+	function updatetext(){
+			document.getElementById('numcirc').innerHTML='Number of Circles: '+numcirc;
+		
+		document.getElementById('pdf').innerHTML='Phase Difference: '+pdf;
+		
+		document.getElementById('smallradius').innerHTML='Inner Radius: '+smallradius;
 	}
 </script>
 </html>
