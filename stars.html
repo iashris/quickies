@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Shiffman Coding Challenge 01: Starfield</title>
+</head>
+<style type="text/css">
+html,body{
+	overflow: hidden;
+}
+*{
+	padding:0;
+	margin: 0;
+}
+	#content{
+		display: fixed;
+		top:0;
+		left:0;
+	}
+</style>
+<script type="text/javascript" src="p5.min.js"></script>
+<body>
+<div id="content"></div>
+</body>
+<script type="text/javascript">
+var speed;
+var StarArray=[];
+	function Star(){ //pseudo class to construct stars
+		this.x=random(-width/2,width/2);
+		this.y=random(-height/2,height/2);
+		this.z=random(10,1000);
+		this.ww=this.z;
+		this.size=10;
+
+		this.show=function(){
+			fill('#fff');
+			this.sx=map(this.x/this.z,-width/2000,width/2000,-width/2,width/2);
+			this.sy=map(this.y/this.z,-height/2000,height/2000,-height/2,height/2);
+			//center coordinates are
+			noStroke();
+			ellipse(this.sx,this.sy,this.size,this.size);
+		}
+		this.update=function(){
+			this.size=constrain(map(Math.abs(this.sy),0,height/2,4,10),4,9);
+			this.z-=speed;
+			if(this.z<=1)this.z=this.ww;
+		}
+	}
+	function setup(){
+		var myCanvas=createCanvas(windowWidth,windowHeight+2);
+		myCanvas.parent('content');
+		for(var i=0;i<1300;i++)StarArray.push(new Star()); //create array of stars
+
+	}
+	function draw(){
+		speed=6*mouseX/width;
+		translate(width/2,height/2);
+		background('rgba(22,22,22,0.25)');
+		for(var i=0;i<1300;i++){
+			StarArray[i].update();
+			StarArray[i].show();
+		}
+	}
+	function windowResized() {
+		resizeCanvas(windowWidth, windowHeight);
+	}
+</script>
+</html>

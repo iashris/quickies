@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Shiffman Coding Challenge 01: Starfield</title>
+</head>
+<style type="text/css">
+html,body{
+	overflow: hidden;
+}
+*{
+	padding:0;
+	margin: 0;
+}
+	#content{
+		display: fixed;
+		top:0;
+		left:0;
+	}
+</style>
+<script type="text/javascript" src="p5.min.js"></script>
+<body>
+<div id="content"></div>
+</body>
+<script type="text/javascript">
+	function setup(){
+		var myCanvas=createCanvas(windowWidth,windowHeight+2);
+		myCanvas.parent('content');
+	}
+	function draw(){
+		
+
+	}
+	function windowResized() {
+		resizeCanvas(windowWidth, windowHeight);
+	}
+</script>
+</html>
