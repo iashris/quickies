@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Menger Sponge Fractal</title>
+</head>
+<style type="text/css">
+html,body{
+	overflow: hidden;
+}
+*{
+	padding:0;
+	margin: 0;
+}
+	#content{
+		position: fixed;
+		top:0;
+		left:0;
+		z-index: -2;
+
+	}
+	#cover{
+		z-index: 100;
+		position: fixed;
+		top:0;
+		width: 100vw;
+		height: 100%;
+		visibility: visible;
+		opacity: 1;
+		left:0;
+		transition: visibility 1s,opacity 0.5s linear;
+		background: #222;
+	}
+	#innercontents{
+		position: relative;
+		display: block;
+		vertical-align: middle;
+		margin: auto;
+		color:white;
+		font-family: 'Lato',Helvetica;
+		text-align: center;
+		top:45%;
+		
+	}
+		#instructions{
+		z-index: 10;
+		color:black;
+		position: fixed;
+		bottom:20px;
+		text-align: center;
+		font-family: Lato;
+		display: block;
+		width: 100%;
+		transition: visibility 1s,opacity 0.5s linear;
+
+	}
+</style>
+<script type="text/javascript" src="p5.min.js"></script>
+<body>
+
+<div id="content"></div>
+<div id="instructions">Some instructions here to explain the random shit above</div>
+<div id="cover">
+<div id="innercontents">
+TITLE GOES HERE :)
+</div>
+
+
+</div>
+</body>
+<script type="text/javascript">
+setTimeout(hiide,300);
+var angle=0;
+
+
+function setup(){
+  var mycanvas=createCanvas(innerWidth, innerHeight,WEBGL); //P3D equivalent
+  mycanvas.parent('content');
+
+}
+
+
+function draw(){
+	background('#ff00ff');
+	noFill();
+	stroke('#222');
+	rotateX(sin(radians(frameCount/10)));
+	rotateZ(cos(radians(frameCount/10+2000)));
+
+	scale(0.4);
+	//rotateX(angle);rotateY(angle);rotateZ(angle);angle+=0.01;
+	background(255);
+	for(var i=-900;i<=900;i+=150){
+		for(var j=-900;j<=900;j+=150){
+			for(var k=-900;k<=900;k+=150){
+				push();
+				translate(i,j,k);
+				rotateY(noise(frameCount*(i+j+2*k)/300000)*PI);
+				rotateX(noise(frameCount*(2*i+3*j+k)/300000)*PI);
+				torus(40);
+				pop();
+			}
+		}
+	}
+}
+
+
+
+
+	function windowResized() {resizeCanvas(windowWidth, windowHeight);}function hiide(){document.getElementById('cover').style.opacity="0";document.getElementById('cover').style.visibility="hidden";}
+</script>
+</html>

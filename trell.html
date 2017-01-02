@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Demo</title>
+</head>
+<script type="text/javascript" src="p5.min.js"></script>
+<body>
+<div id="here"></div>
+</body>
+<script type="text/javascript">
+	var scribbles;
+	var cursorposition;
+function setup(){
+	var mycanvas=createCanvas(1000,600);
+	mycanvas.parent('here');
+	fill(255);
+	noStroke();
+	scribbles=new Scribble();
+}
+function Scribble(){
+	this.values=[];
+	this.update=function(){
+		this.values.push(cursorposition);
+	}
+	this.show=function(){
+		for(var i=0;i<this.values.length;i++){
+			ellipse(this.values[i].x,this.values[i].y,10,10);
+		}
+	}
+}
+function draw(){
+	background(55);
+	cursorposition=createVector(mouseX,mouseY);
+	//console.log(cursorposition);
+	scribbles.update();
+	scribbles.show();
+	
+
+}
+
+</script>
+</html>

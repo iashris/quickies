@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Menger Sponge Fractal</title>
+</head>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+<style type="text/css">
+html,body{
+	overflow: hidden;
+}
+*{
+	padding:0;
+	margin: 0;
+	font-family: Roboto,sans-serif;
+}
+	#content{
+		position: fixed;
+		top:0;
+		left:0;
+		z-index: -2;
+
+	}
+	#cover{
+		z-index: 100;
+		position: fixed;
+		top:0;
+		width: 100vw;
+		height: 100%;
+		visibility: visible;
+		opacity: 1;
+		left:0;
+		transition: visibility 1s,opacity 0.5s linear;
+		background: #222;
+	}
+	#innercontents{
+		position: relative;
+		display: block;
+		vertical-align: middle;
+		margin: auto;
+		color:white;
+		font-family: 'Lato',Helvetica;
+		text-align: center;
+		top:50%;
+		font-size: 1.6em;
+		
+	}
+		#instructions{
+		z-index: 10;
+		color:black;
+		position: fixed;
+		bottom:20px;
+		text-align: center;
+		font-family: Roboto;
+		display: block;
+		width: 100%;
+		font-size: 0.8em;
+		transition: visibility 1s,opacity 0.5s linear;
+
+	}
+</style>
+<script type="text/javascript" src="p5.min.js"></script>
+<body>
+
+<div id="content"></div>
+<div id="instructions">
+<h2>Complexity: <span id="comp">0</span></h2>
+<p>Click to increase the complexity. Warning: Computer may hang after complexity 4</p></div>
+<div id="cover">
+<div id="innercontents">
+Menger's Sponge
+</div>
+
+
+</div>
+</body>
+<script type="text/javascript">
+setTimeout(hiide,3000);
+var angle=0;
+
+var b;
+var comp=0;
+
+
+function setup(){
+  var mycanvas=createCanvas(innerWidth, innerHeight,WEBGL); //P3D equivalent
+  mycanvas.parent('content');
+  b=[new Box(0,0,0,290)];
+
+}
+
+
+function R(a){
+	return 0.5*a*(Math.random()-0.5);
+}
+
+function draw(){
+	rotateX(angle);rotateY(angle);angle+=0.01;
+	//orbitControl();
+	background(255);
+	stroke(255);
+	strokeWeight(4);
+ 	pointLight(255, 255, 255, mouseX, mouseY,20);
+	ambientMaterial(250,255,255);
+
+	for(var i=0;i<b.length;i++)b[i].show();
+}
+
+function mousePressed(){
+	comp++;
+var irez=[];
+	for(var i=0;i<b.length;i++){
+		var z=b[i].generate();
+		for(var k=0;k<z.length;k++){
+			irez.push(z[k]);
+		}
+	}
+
+b=irez;
+document.getElementById('comp').innerHTML=comp;
+}
+
+function Box(x,y,z,size){ //pseudo class
+	this.pos=createVector(x,y,z);
+	this.size=size;
+	this.angle=Math.random()*300;
+}
+Box.prototype.show=function(){
+	push();
+	translate(this.pos.x,this.pos.y,this.pos.z);
+	box(this.size);
+	pop();
+	
+}
+Box.prototype.generate=function(){
+	var rez=[];
+	var r_=this.size/3;
+	for(var x=-1;x<2;x++){
+		for(var y=-1;y<2;y++){
+			for(var z=-1;z<2;z++){
+				var smallb=new Box(this.pos.x+r_*x,this.pos.y+r_*y,this.pos.z+r_*z,r_);
+				if(Math.abs(x)+Math.abs(y)+Math.abs(z)>=2)rez.push(smallb);
+			}
+		}
+	}
+	return rez;
+}
+
+
+	function windowResized() {resizeCanvas(windowWidth, windowHeight);}function hiide(){document.getElementById('cover').style.opacity="0";document.getElementById('cover').style.visibility="hidden";}
+</script>
+</html>

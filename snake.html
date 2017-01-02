@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Menger Sponge Fractal</title>
+</head>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+<style type="text/css">
+html,body{
+	overflow: hidden;
+}
+*{
+	padding:0;
+	margin: 0;
+	font-family: Roboto,sans-serif;
+}
+	#content{
+		position: fixed;
+		top:0;
+		left:0;
+		z-index: -2;
+
+	}
+	#cover{
+		z-index: 100;
+		position: fixed;
+		top:0;
+		width: 100vw;
+		height: 100%;
+		visibility: visible;
+		opacity: 1;
+		left:0;
+		transition: visibility 1s,opacity 0.5s linear;
+		background: #222;
+	}
+	#innercontents{
+		position: relative;
+		display: block;
+		vertical-align: middle;
+		margin: auto;
+		color:white;
+		font-family: 'Lato',Helvetica;
+		text-align: center;
+		top:50%;
+		font-size: 1.6em;
+		
+	}
+		#instructions{
+		z-index: 10;
+		color:black;
+		position: fixed;
+		bottom:20px;
+		text-align: center;
+		font-family: Roboto;
+		display: block;
+		width: 100%;
+		font-size: 0.8em;
+		transition: visibility 1s,opacity 0.5s linear;
+
+	}
+</style>
+<script type="text/javascript" src="p5.min.js"></script>
+<body>
+
+<div id="content"></div>
+<div id="instructions">
+<h2>Complexity: <span id="comp">0</span></h2>
+<p>Click to increase the complexity. Warning: Computer may hang after complexity 4</p></div>
+<div id="cover">
+<div id="innercontents">
+Menger's Sponge
+</div>
+
+
+</div>
+</body>
+<script type="text/javascript">
+
+
+/*
+The challenge I am facing now is to include keydown event within a Class method of updating direction. --> got the solution) inbuilt keyPressed function
+
+
+I also learnt that on storing an array with values PVector, the array values store values lazily, that is if the vector changes, the values in the array point at different values. so always store a fresh new vector reading from the current vector's coordinates 
+
+
+
+
+*/
+setTimeout(hiide,30);
+var snake;
+var scl=20;
+var food;
+function Snake(x,y){
+	this.headposition=createVector(x,y);
+	this.direction=createVector(-1*scl,0);
+	this.LNTH=4;
+	this.tail=[];
+}
+
+Snake.prototype.move=function(){
+
+	if(this.tail.length!=this.LNTH)
+		{this.tail.push(createVector(this.headposition.x,this.headposition.y));}
+	else if(this.headposition.x!=10 && this.headposition.x!=width-10 && this.headposition.y!=10 && this.headposition.y!=height-10){
+		this.tail.shift();
+		this.tail.push(createVector(this.headposition.x,this.headposition.y));
+	}
+
+	console.log(this.tail);
+
+	this.headposition=this.headposition.add(this.direction);
+	this.headposition.x=constrain(this.headposition.x,10,width-10);
+	this.headposition.y=constrain(this.headposition.y,10,height-10);
+
+	//check if food is eaten
+	if(this.headposition.x==food.x && this.headposition.y==food.y){
+		food=pickLocation();
+		this.LNTH++;
+	}
+
+	//tail part
+	
+
+}
+Snake.prototype.show=function(){
+	//render head
+	rect(this.headposition.x,this.headposition.y,scl,scl);
+
+	//render tail
+	for(var i=0;i<this.tail.length;i++){
+		rect(this.tail[i].x,this.tail[i].y,scl,scl);
+	}
+}
+
+
+
+
+function setup(){
+	frameRate(8);
+	  var mycanvas=createCanvas(innerWidth, innerHeight); //P3D equivalent
+  mycanvas.parent('content');
+  rectMode(CENTER);
+  snake=new Snake(810,410);
+  food=pickLocation();
+  for(var i=0;i<snake.LNTH;i++){
+  	snake.move();
+  }
+
+}
+
+function pickLocation(){ //returns a vector of food
+	var nx=parseInt(width/scl);
+	var ny=parseInt(height/scl);
+	return createVector(Math.floor(Math.random()*nx)*scl+10,Math.floor(Math.random()*ny)*scl+10);
+
+}
+
+function draw(){
+background(52);
+noStroke();
+fill(255);
+snake.move();
+snake.show();
+fill('#2afd67');
+rect(food.x,food.y,scl,scl);
+}
+
+function keyPressed(){
+	if(keyCode==UP_ARROW)snake.direction=createVector(0,-1*scl);
+	if(keyCode==DOWN_ARROW)snake.direction=createVector(0,scl);
+	if(keyCode==RIGHT_ARROW)snake.direction=createVector(scl,0);
+	if(keyCode==LEFT_ARROW)snake.direction=createVector(-1*scl,0);
+}
+
+
+	function windowResized() {resizeCanvas(windowWidth, windowHeight);}function hiide(){document.getElementById('cover').style.opacity="0";document.getElementById('cover').style.visibility="hidden";}
+</script>
+</html>
